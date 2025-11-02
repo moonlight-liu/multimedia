@@ -1,6 +1,7 @@
 from PIL import Image
 import os
 import time
+import io
 
 # 1.设置原始图片的文件名
 input_filename = "original_color.jpg"
@@ -71,23 +72,29 @@ print("-----------------------------")
 print("\n作业问题2：JPEG有损压缩比较")
 print("\n比较1：高质量/低压缩比(Quality=90)")
 output_jpg_high_q = "output_high_quality_90.jpg"
+
+buffer_high = io.BytesIO() # 创建一个内存缓冲区，纯计算和编码过程
 start_time_high = time.time()
-img_color.save(output_jpg_high_q, format="JPEG", quality=90)
+for i in range(1000):  # 多次保存，减少偶然误差
+    img_color.save(buffer_high, format="JPEG", quality=90)
 end_time_high = time.time()
 time_high = end_time_high - start_time_high
-size_high = os.path.getsize(output_jpg_high_q)
-print(f"文件保存成功: {output_jpg_high_q}")
+size_high = buffer_high.tell()
+# print(f"文件保存成功: {output_jpg_high_q}")
 print(f"处理时间: {time_high} 秒")
 print(f"文件大小: {size_high} 字节")
 
 print("\n比较2：低质量/高压缩比(Quality=10)")
 output_jpg_low_q = "output_low_quality_10.jpg"
+
+buffer_low = io.BytesIO() # 创建一个内存缓冲区，纯计算和编码过程
 start_time_low = time.time()
-img_color.save(output_jpg_low_q, format="JPEG", quality=10)
+for i in range(1000):  # 多次保存，减少偶然误差
+    img_color.save(buffer_low, format="JPEG", quality=10)
 end_time_low = time.time()
 time_low = end_time_low - start_time_low
-size_low = os.path.getsize(output_jpg_low_q)
-print(f"文件保存成功: {output_jpg_low_q}")
+size_low = buffer_low.tell()
+# print(f"文件保存成功: {output_jpg_low_q}")
 print(f"处理时间: {time_low} 秒")
 print(f"文件大小: {size_low} 字节")
 
